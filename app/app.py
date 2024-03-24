@@ -1,7 +1,6 @@
 from flask import Flask, render_template, Response, request, jsonify
 from camera import VideoCamera
 import pandas as pd
-from playsound import playsound
 
 #from webservices import app_webservices
 global_msg = ""
@@ -20,25 +19,19 @@ def gen(camera):
         #drowsy = camera.get_frame2()
         yield (b"--frame\r\n"
                b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n\r\n")
-        #yield is_drowsy
-        
 
 @app.route("/video_feed")
 def video_feed():
     s = VideoCamera()
     resp = Response(gen(s),
                 mimetype="multipart/x-mixed-replace; boundary=frame")#,
-                #response="hello")
-    #return Response(gen(VideoCamera()),
-                    #mimetype="multipart/x-mixed-replace; boundary=frame")
     return resp
 
 @app.route("/get-data",methods=['GET'])
 def get_data(msg = global_msg):
-    print("msg: ",msg)
+    #print("msg: ",msg)
     data = msg
     return jsonify(data)
 
 if __name__ == "__main__":
-    # defining server ip address and port
     app.run(host="127.0.0.1",port="5001", debug=True)

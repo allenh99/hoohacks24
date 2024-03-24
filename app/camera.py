@@ -2,11 +2,7 @@ import cv2
 from face_mesh import FaceMeshDetector
 from drowsiness_alerter import DrowsinessAlerter
 import requests
-import time
 from playsound import playsound
-from pathlib import Path
-
-SOUNDS_PATH = str(Path.cwd())[:-3] + "sounds\\"
 
 class VideoCamera(object):
     def __init__(self):
@@ -50,9 +46,11 @@ class VideoCamera(object):
     
     def generate(self):
         sounds = {
-            0: "sounds/Alice_voice.wav"
+            0: "sounds/airhorn.mp3",
+            1: "sounds/Alice_wake_up.wav"
         }
         playsound(sounds[0])
+        playsound(sounds[1])
 
 
         

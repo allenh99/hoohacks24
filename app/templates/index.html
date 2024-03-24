@@ -37,15 +37,14 @@
 </script>
   <head>
     <title>Drowsiness Prevention System</title>
+    
     <link rel="stylesheet" href="../static/style.css">
   </head>
   <body id="body">
-    <h1>Drowsiness Prevention System {{drowsy}}</h1>
+    <img id="logo" src="../static/logo.png" class="center">
+    <p></p>
     <div id="webcam_feed_div">
-      <h2>Webcam Video Feed</h2>
       <img id="webcam_feed" src="{{ url_for('video_feed') }}">
-      <button type ="button" id="showDataButton" onClick=showAllData() >Show drowsiness data</button>
-      <p id="drowsy_text">{{data}}</p>
     </div>
   </body>
 </html>

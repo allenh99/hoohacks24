@@ -14,22 +14,16 @@ class FaceMeshDetector:
             min_detection_confidence=0.5,
             min_tracking_confidence=0.5
         )
-
-        # Useful mesh point indices for calculating eye aspect ratio
         self.eye_landmarks = [33, 133, 160, 144, 158, 153, 362, 263, 385, 380, 387, 373]
 
     def get_eye_aspect_ratio(self, eye_landmarks):
-        """Compute the eye aspect ratio"""
         horizontal = distance.euclidean(eye_landmarks[0], eye_landmarks[1])
         vertical_1 = distance.euclidean(eye_landmarks[2], eye_landmarks[3])
         vertical_2 = distance.euclidean(eye_landmarks[4], eye_landmarks[5])
-
         ear = (vertical_1 + vertical_2) / (2* horizontal)
-
         return ear
 
     def detect_mesh(self, image):
-        """Adds mesh to the image and returns eye coordinates with it."""
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         results = self.face_mesh.process(image)
 
@@ -40,32 +34,18 @@ class FaceMeshDetector:
             for face_landmarks in results.multi_face_landmarks:
                 landmark_coords = [(d.x, d.y, d.z) for d in face_landmarks.landmark]
                 
-                self.mp_drawing.draw_landmarks(
-                    image=image,
-                    landmark_list=face_landmarks,
-                    connections=self.mp_face_mesh.FACEMESH_TESSELATION,
-                    landmark_drawing_spec=None,
-                    connection_drawing_spec=self.mp_drawing_styles
-                    .get_default_face_mesh_tesselation_style()
-                )
                 # self.mp_drawing.draw_landmarks(
                 #     image=image,
                 #     landmark_list=face_landmarks,
-                #     connections=self.mp_face_mesh.FACEMESH_CONTOURS,
+                #     connections=self.mp_face_mesh.FACEMESH_TESSELATION,
                 #     landmark_drawing_spec=None,
                 #     connection_drawing_spec=self.mp_drawing_styles
-                #     .get_default_face_mesh_contours_style()
-                # )
-                # self.mp_drawing.draw_landmarks(
-                #     image=image,
-                #     landmark_list=face_landmarks,
-                #     connections=self.mp_face_mesh.FACEMESH_IRISES,
-                #     landmark_drawing_spec=None,
-                #     connection_drawing_spec=self.mp_drawing_styles
-                #     .get_default_face_mesh_iris_connections_style()
+                #     .get_default_face_mesh_tesselation_style()
                 # )
 
             eye_coords = [(landmark_coords[index][0],landmark_coords[index][1]) for index in self.eye_landmarks]
+
+            #image = self.draw_eye_lines(image, eye_coords)
 
             drowsiness, ear_right, ear_left = self.get_drowsiness_level(eye_coords)
 
@@ -83,13 +63,7 @@ class FaceMeshDetector:
 
 
     def get_drowsiness_level(self, eye_coords):
-        """Compute the drowsiness level and ear for both eyes."""
         ear_right = self.get_eye_aspect_ratio(eye_coords[:6])
         ear_left = self.get_eye_aspect_ratio(eye_coords[6:])
         drowsiness = (ear_right + ear_left) / 2
         return drowsiness, ear_right, ear_left
-
-    
-    
-
-
