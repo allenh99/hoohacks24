@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
   <script type="text/javascript">
+    document.addEventListener('DOMContentLOaded',function(){
+      fetch('/get-data')
+        .then(response => response.json())
+        .then(data => console.log(data))
+    })
     function showAllData()
     {
       let req = new XMLHttpRequest();
@@ -31,7 +36,7 @@
     <link rel="stylesheet" href="../static/style.css">
   </head>
   <body id="body">
-    <h1>Drowsiness Prevention System</h1>
+    <h1>Drowsiness Prevention System {{drowsy}}</h1>
     <div id="webcam_feed_div">
       <h2>Webcam Video Feed</h2>
       <img id="webcam_feed" src="{{ url_for('video_feed') }}">

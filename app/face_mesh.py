@@ -39,7 +39,7 @@ class FaceMeshDetector:
         if results.multi_face_landmarks:
             for face_landmarks in results.multi_face_landmarks:
                 landmark_coords = [(d.x, d.y, d.z) for d in face_landmarks.landmark]
-
+                
                 self.mp_drawing.draw_landmarks(
                     image=image,
                     landmark_list=face_landmarks,
@@ -48,14 +48,14 @@ class FaceMeshDetector:
                     connection_drawing_spec=self.mp_drawing_styles
                     .get_default_face_mesh_tesselation_style()
                 )
-                self.mp_drawing.draw_landmarks(
-                    image=image,
-                    landmark_list=face_landmarks,
-                    connections=self.mp_face_mesh.FACEMESH_CONTOURS,
-                    landmark_drawing_spec=None,
-                    connection_drawing_spec=self.mp_drawing_styles
-                    .get_default_face_mesh_contours_style()
-                )
+                # self.mp_drawing.draw_landmarks(
+                #     image=image,
+                #     landmark_list=face_landmarks,
+                #     connections=self.mp_face_mesh.FACEMESH_CONTOURS,
+                #     landmark_drawing_spec=None,
+                #     connection_drawing_spec=self.mp_drawing_styles
+                #     .get_default_face_mesh_contours_style()
+                # )
                 # self.mp_drawing.draw_landmarks(
                 #     image=image,
                 #     landmark_list=face_landmarks,
@@ -67,13 +67,11 @@ class FaceMeshDetector:
 
             eye_coords = [(landmark_coords[index][0],landmark_coords[index][1]) for index in self.eye_landmarks]
 
-            image = self.draw_eye_lines(image, eye_coords)
-
             drowsiness, ear_right, ear_left = self.get_drowsiness_level(eye_coords)
 
-            is_drowsy = drowsiness < 0.15
+            is_drowsy = drowsiness < 0.3
 
-            image = self.display_drowsiness(image, is_drowsy, ear_right, ear_left)
+            #image = self.display_drowsiness(image, is_drowsy, ear_right, ear_left)
 
         return image, is_drowsy
 
@@ -91,15 +89,6 @@ class FaceMeshDetector:
         ear_left = self.get_eye_aspect_ratio(eye_coords[6:])
         drowsiness = (ear_right + ear_left) / 2
         return drowsiness, ear_right, ear_left
-
-
-    def draw_eye_lines(self, image, eye_coords):
-        y_length, x_length, _ = image.shape
-        for i in range(0, len(eye_coords), 2):
-            point1 = (int(eye_coords[i][0] * x_length), int(eye_coords[i][1] * y_length))
-            point2 = (int(eye_coords[i+1][0] * x_length), int(eye_coords[i+1][1] * y_length))
-            image = cv2.line(image, point1, point2, (255, 0, 0))
-        return image
 
     
     
