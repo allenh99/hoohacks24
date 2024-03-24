@@ -1,8 +1,10 @@
 from flask import Flask, render_template, Response, request, jsonify
 from camera import VideoCamera
 import pandas as pd
-#from webservices import app_webservices
+from playsound import playsound
 
+#from webservices import app_webservices
+global_msg = ""
 app = Flask(__name__)
 
 @app.route("/")
@@ -14,7 +16,7 @@ def gen(camera):
     while True:
         #get camera frame
         frame = camera.get_frame()
-        #print(camera.drowsy)
+        global_msg = camera.drowsy
         #drowsy = camera.get_frame2()
         yield (b"--frame\r\n"
                b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n\r\n")
@@ -29,12 +31,13 @@ def video_feed():
                 #response="hello")
     #return Response(gen(VideoCamera()),
                     #mimetype="multipart/x-mixed-replace; boundary=frame")
-    return render_template("index.html", drowsy = s.drowsy)
+    return resp
 
-@app.route("/get-data",methods=['GET', 'POST'])
-def get_data():
-    data = "hello world"
-    return data
+@app.route("/get-data",methods=['GET'])
+def get_data(msg = global_msg):
+    print("msg: ",msg)
+    data = msg
+    return jsonify(data)
 
 if __name__ == "__main__":
     # defining server ip address and port

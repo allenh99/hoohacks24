@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html>
   <script type="text/javascript">
-    document.addEventListener('DOMContentLOaded',function(){
+    document.addEventListener('DOMContentLoaded',function(){
       fetch('/get-data')
         .then(response => response.json())
-        .then(data => console.log(data))
+        .then(data => {
+            console.log(data);
+            let drowsyP = document.getElementById('drowsy_text');
+            drowsyP.innerHTML = data;
+        })
     })
     function showAllData()
     {
@@ -41,6 +45,7 @@
       <h2>Webcam Video Feed</h2>
       <img id="webcam_feed" src="{{ url_for('video_feed') }}">
       <button type ="button" id="showDataButton" onClick=showAllData() >Show drowsiness data</button>
+      <p id="drowsy_text">{{data}}</p>
     </div>
   </body>
 </html>

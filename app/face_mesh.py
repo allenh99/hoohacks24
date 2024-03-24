@@ -72,14 +72,13 @@ class FaceMeshDetector:
             is_drowsy = drowsiness < 0.3
 
             #image = self.display_drowsiness(image, is_drowsy, ear_right, ear_left)
+            image = self.display_drowsiness(image, is_drowsy)
 
         return image, is_drowsy
 
-    def display_drowsiness(self, image, is_drowsy, ear_right, ear_left):
+    def display_drowsiness(self, image, is_drowsy):
         status = "Drowsy" if is_drowsy else "Awake"
-        cv2.putText(image, f"{ear_right:.3f}", org=(50,50), fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=1, color=(255,255,0), thickness=2)
-        cv2.putText(image, f"{ear_left:.3f}", org=(250,50), fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=1, color=(255,255,0), thickness=2)
-        cv2.putText(image, status, org=(100,100), fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=1, color=(255,255,0), thickness=2)
+        cv2.putText(image, status, org=(200,100), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=2, color=(0,0,0), thickness=2)
         return image
 
 
