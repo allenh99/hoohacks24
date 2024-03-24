@@ -47,12 +47,12 @@ class VideoCamera(object):
     def generate(self):
         sounds = {
             #0: "sounds/airhorn.mp3",
-            0: "sounds/Alice_wake_up.wav",
+            #0: "sounds/Alice_wake_up.wav",
             #1: "sounds/Alice_wake_up.wav"
-            1: "youshouldgetsomerest.mp3"
+            0: "youshouldgetsomerest.mp3"
         }
         playsound(sounds[0])
-        playsound(sounds[1])
+        #playsound(sounds[1])
 
 
         
